@@ -16,7 +16,7 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     try {        
-        res.status(200).send("Precursor backend");
+        res.status(200).send("Precursor backend is running!");
     }
     catch(err){
         return res.status(400).send(err);
