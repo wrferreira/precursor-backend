@@ -2,11 +2,11 @@
   "name": "precursor-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js",
-    "start": "node ./dist/index.js",
+    "dev": "nodemon src/server.ts",
+    "start": "node ./dist/index.ts",
     "build": "rm -rf ./dist && tsc"
   },
   "keywords": [],
