@@ -1,5 +1,6 @@
 import { db } from '../db.config';
 import User from '../models/User.model';
+import { Encrypt } from '../utils/encrypt';
 
 export default class UserService {
 
@@ -17,11 +18,12 @@ export default class UserService {
     }
 
     async getUserGoogle(user: User): Promise<User> {
+        const password = await Encrypt.cryptPassword(user.password);
         const { rows } = await db.query("INSERT INTO users(name, email, password, terms, google_id, picture, birth) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (google_id) DO NOTHING RETURNING *",
         [
             user.name,
             user.email,
-            user.password,
+            password,
             user.terms,
             user.google_id,
             user.picture,
@@ -36,17 +38,24 @@ export default class UserService {
         }
     }
 
-    async login(user: User): Promise<User> {
-        const { rows } = await db.query('SELECT * FROM users WHERE email =$1 AND password =$2', [user.email, user.password]);
-        return rows;
+    async login(user: User): Promise<User | null> {
+        const { rows } = await db.query('SELECT * FROM users WHERE email =$1', [user.email]);
+        console.log(rows)
+        if(rows[0].password && user.password) {
+            if (await Encrypt.comparePassword(user.password, rows[0].password)) {
+                return rows;  
+            }
+        }
+        return null;
     }
 
     async register(user: User): Promise<User> {
+        const password = await Encrypt.cryptPassword(user.password);
         const { rows } = await db.query("INSERT INTO users(name, email, password, terms, google_id, picture, birth) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
         [
             user.name,
             user.email,
-            user.password,
+            password,
             user.terms,
             user.google_id,
             user.picture,
