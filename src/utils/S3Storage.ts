@@ -42,11 +42,12 @@ export default class S3Storage {
             const data = await this.client.upload(params).promise();
             
             if (data) {
-              fs.unlinkSync(originalPath);
               const fileResult = {
                 key: data.Key,
                 type: file.mimetype ? file.mimetype : null
               } as File;
+
+              await fs.promises.unlink(originalPath);
 
               return fileResult;
             }
@@ -56,11 +57,11 @@ export default class S3Storage {
           }
     }
 
-    async getFile(id: string): Promise<any> {
+    async getFile(key: string): Promise<any> {
 
       const params = {
         Bucket: process.env.BUCKET || '',
-        Key: `${id}.mp4`,
+        Key: `${key}`,
       };
 
       const { Body } = await this.client.getObject(params).promise();

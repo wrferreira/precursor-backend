@@ -40,7 +40,7 @@ export default class UserService {
 
     async login(user: User): Promise<User | null> {
         const { rows } = await db.query('SELECT * FROM users WHERE email =$1', [user.email]);
-        console.log(rows)
+
         if(rows[0].password && user.password) {
             if (await Encrypt.comparePassword(user.password, rows[0].password)) {
                 return rows;  

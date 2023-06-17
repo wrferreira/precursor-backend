@@ -19,4 +19,9 @@ export default class VideoService {
 
         return rows;
     }
+
+    async getVideo(id: number): Promise<Video> {
+        const { rows } = await db.query('SELECT * FROM videos WHERE id=$1', [id]);
+        return rows[0];
+    }
 }
