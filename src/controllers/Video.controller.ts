@@ -2,6 +2,7 @@ import Video from "../models/Video.model";
 import VideoService from "../services/Video.service";
 import S3Storage from "../utils/S3Storage";
 import StreamBuffer from "../utils/streamBuffer";
+import Thumbnail from "../utils/thumbnail";
 
 export default class VideoController {
     constructor() {}
@@ -14,15 +15,18 @@ export default class VideoController {
 
             const s3Storage = new S3Storage();
 
-            const fileSaved = await s3Storage.saveFile(file);
+            new Thumbnail().generate(file);
+            // const fileSaved = await s3Storage.saveFile(`../../tmp/${file.filename}`);
 
-            if(fileSaved?.key) {
-                video.key = fileSaved?.key;
-                const result = await new VideoService().save(video);
-                return res.status(200).send(result);
-            } else {
-                throw new Error('Erro ao gravar o arquivo');
-            }
+            // const fileSaved = await s3Storage.saveFile(file);
+
+            // if(fileSaved?.key) {
+            //     video.key = fileSaved?.key;
+            //     const result = await new VideoService().save(video);
+            //     return res.status(200).send(result);
+            // } else {
+            //     throw new Error('Erro ao gravar o arquivo');
+            // }
         } catch (err) {
             return res.status(400).send(err);
         }
@@ -31,16 +35,12 @@ export default class VideoController {
     async stream(req: any, res: any, next: any) {
         try {
             const { id } = req.params;
-            
-            const s3Storage = new S3Storage();
+
             const result = await new VideoService().getVideo(id);
             if(!result) throw new Error('Id não encontrado');
 
-            const videoBuffer = await s3Storage.getFile(result.key);
-            const videoStream = StreamBuffer.createStreamFromBuffer(videoBuffer);
-            res.setHeader('Content-Type', 'video/mp4');
-
-            videoStream.pipe(res);
+            StreamBuffer.streamVideo(req, res, result.key);
+            
         } catch (err) {
             console.error(err);
             res.sendStatus(500);
@@ -58,4 +58,3 @@ export default class VideoController {
     }
 
 }
-
