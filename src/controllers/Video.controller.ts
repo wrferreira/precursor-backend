@@ -15,18 +15,15 @@ export default class VideoController {
 
             const s3Storage = new S3Storage();
 
-            new Thumbnail().generate(file);
-            // const fileSaved = await s3Storage.saveFile(`../../tmp/${file.filename}`);
+            const fileSaved = await s3Storage.saveFile(file);
 
-            // const fileSaved = await s3Storage.saveFile(file);
-
-            // if(fileSaved?.key) {
-            //     video.key = fileSaved?.key;
-            //     const result = await new VideoService().save(video);
-            //     return res.status(200).send(result);
-            // } else {
-            //     throw new Error('Erro ao gravar o arquivo');
-            // }
+            if(fileSaved?.key) {
+                video.key = fileSaved?.key;
+                const result = await new VideoService().save(video);
+                return res.status(200).send(result);
+            } else {
+                throw new Error('Erro ao gravar o arquivo');
+            }
         } catch (err) {
             return res.status(400).send(err);
         }

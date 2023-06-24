@@ -1,10 +1,7 @@
 import aws, { S3 } from 'aws-sdk';
-import path from 'path';
-import fs from 'fs';
 
 require('dotenv').config();
 
-import multerConfig from '../config/multer';
 import File from '../models/File.model';
 
 export default class S3Storage {
@@ -19,18 +16,16 @@ export default class S3Storage {
     }
 
     async saveFile(file: any): Promise<File | void> {
-      const originalPath = path.resolve(multerConfig.directory, file.filename);
-
       const date = new Date().toLocaleDateString().split('/').reverse().join('-');
       const time = new Date().toLocaleTimeString([], { hour12: false }).split(':').join('-');
 
-      const contentType = originalPath.split('.').pop();
+      const contentType = file.originalname.split('.').pop();
 
       const params = {
         ACL: 'public-read',
         Bucket: process.env.BUCKET || '',
-        Body: file,
-        Key: `${date}--${time}${file.filename}`.replace(/\s/g, ''),
+        Body: file.buffer,
+        Key: `${date}--${time}${file.originalname}`.replace(/\s/g, ''),
         ContentType: contentType,
       };
 
@@ -40,14 +35,12 @@ export default class S3Storage {
 
       try {
         const data = await this.client.upload(params).promise();
-        
+
         if (data) {
           const fileResult = {
             key: data.Key,
             type: file.mimetype ? file.mimetype : null
           } as File;
-
-          await fs.promises.unlink(originalPath);
 
           return fileResult;
         }
@@ -55,7 +48,7 @@ export default class S3Storage {
         console.log("ERROR", error)
         return;
       }
-    }
+   }
 
     getVideoStream(key: any, startByte: any, endByte: any) {
       const params = {

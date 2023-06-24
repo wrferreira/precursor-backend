@@ -1,19 +1,18 @@
 import path from 'path';
-import multerConfig from '../config/multer';
 
 const ffmpeg = require('fluent-ffmpeg');
 
 export default class Thumbnail { 
     async generate(file: any) {
-        const videoPath = path.resolve(multerConfig.directory, file.filename);
-        const thumbnailPath = path.join(multerConfig.directory);
+        // const videoPath = path.resolve(multerConfig.directory, file.filename);
+        // const thumbnailPath = path.join(multerConfig.directory);
 
-        console.log(videoPath, file.filename);
+        // console.log(videoPath, file.filename);
 
-        ffmpeg({ source: videoPath }).thumbnail({
-            filename: `${file.filename.split('.')[0]}.jpg`,
-            folder: multerConfig.directory,
-            timemarks: [2]
-        }, '.');
+        // ffmpeg({ source: videoPath }).thumbnail({
+        //     filename: `${file.filename.split('.')[0]}.jpg`,
+        //     folder: multerConfig.directory,
+        //     timemarks: [2]
+        // }, '.');
     }
 }
