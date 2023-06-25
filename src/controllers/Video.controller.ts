@@ -2,23 +2,25 @@ import Video from "../models/Video.model";
 import VideoService from "../services/Video.service";
 import S3Storage from "../utils/S3Storage";
 import StreamBuffer from "../utils/streamBuffer";
-import Thumbnail from "../utils/thumbnail";
 
 export default class VideoController {
     constructor() {}
 
     async uploadVideo(req: any, res: any, next: any) {
         try {
-            const { file } = req;
+            const thumbFile = req.files[0];
+            const videoFile = req.files[1];
             const { data } = req.body;
             const video = JSON.parse(data) as Video;
-
+            
             const s3Storage = new S3Storage();
 
-            const fileSaved = await s3Storage.saveFile(file);
+            const videoSaved = await s3Storage.saveFile(videoFile);
+            const thumbSaved = await s3Storage.saveFile(thumbFile);
 
-            if(fileSaved?.key) {
-                video.key = fileSaved?.key;
+            if(videoSaved?.key && thumbSaved?.key) {
+                video.key = videoSaved?.key;
+                video.thumbKey = thumbSaved?.key;
                 const result = await new VideoService().save(video);
                 return res.status(200).send(result);
             } else {
@@ -54,4 +56,12 @@ export default class VideoController {
         }
     }
 
+    async listVideos(req: any, res: any, next: any) {
+        try {
+            const result = await new VideoService().listVideos();
+            return res.status(200).send(result);
+        } catch (err) {
+            return res.status(400).send(err);
+        }
+    }
 }

@@ -6,6 +6,7 @@ export default class Video {
     initialText!: string;
     letter!: string;
     key!: string;
+    thumbKey!: string;
     allowDownload!: boolean;
     createAt!: Date;
 }
