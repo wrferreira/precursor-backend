@@ -20,7 +20,7 @@ export default class VideoController {
 
             if(videoSaved?.key && thumbSaved?.key) {
                 video.key = videoSaved?.key;
-                video.thumbKey = thumbSaved?.key;
+                video.thumb_key = thumbSaved?.key;
                 const result = await new VideoService().save(video);
                 return res.status(200).send(result);
             } else {
@@ -58,7 +58,7 @@ export default class VideoController {
 
     async listVideos(req: any, res: any, next: any) {
         try {
-            const result = await new VideoService().listVideos();
+            const result = await new VideoService().getVideos();
             return res.status(200).send(result);
         } catch (err) {
             return res.status(400).send(err);

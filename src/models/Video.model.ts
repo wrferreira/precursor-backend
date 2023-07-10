@@ -3,10 +3,10 @@ export default class Video {
 
     id?: number;
     title!: string;
-    initialText!: string;
+    initial_text!: string;
     letter!: string;
     key!: string;
-    thumbKey!: string;
+    thumb_key!: string;
     allowDownload!: boolean;
     createAt!: Date;
 }

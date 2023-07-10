@@ -10,12 +10,12 @@ export default class VideoService {
         const { rows } = await db.query("INSERT INTO videos(title, initial_text, letter, key, allow_download, create_at, thumb_key) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
         [
             video.title,
-            video.initialText,
+            video.initial_text,
             video.letter,
             video.key,
             video.allowDownload,
             moment().format('MM-DD-YYYY'),
-            video.thumbKey
+            video.thumb_key
         ]);
 
         return rows;
@@ -26,9 +26,8 @@ export default class VideoService {
         return rows[0];
     }
 
-    async listVideos(): Promise<Video> {
-        const a = await db.query('SELECT id, title, initial_text, letter, allow_download, thumb_key FROM videos');
-        console.log(a);
-        return a;
+    async getVideos(): Promise<Video> {
+        const { rows } = await db.query('SELECT id, title, initial_text, letter, allow_download, thumb_key FROM videos');
+        return rows;
     }
 }

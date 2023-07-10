@@ -11,8 +11,8 @@ export const VideoRouter = express.Router();
 
 VideoRouter.post('/create', upload.any(), new VideoController().uploadVideo);
 
-VideoRouter.get('/:id', new VideoController().getVideo);
-
 VideoRouter.get('/list', new VideoController().listVideos);
 
 VideoRouter.get('/stream/:id', new VideoController().stream);
+
+VideoRouter.get('/:id', new VideoController().getVideo);
