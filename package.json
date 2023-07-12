@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.ts",
     "start": "node ./dist/index.ts",
-    "build": "rm -rf ./dist && tsc"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
