@@ -11,8 +11,8 @@ export const SongUserRouter = express.Router();
 
 SongUserRouter.post('/create', upload.any(), new SongUserController().uploadSong);
 
-SongUserRouter.get('/list', new SongUserController().listSongs);
+SongUserRouter.get('/list/:id', new SongUserController().listSongsByUser);
 
 SongUserRouter.get('/stream/:id', new SongUserController().stream); 
 
-SongUserRouter.get('/:id', new SongUserController().getSong);
+SongUserRouter.get('/:id', new SongUserController().getSongById);

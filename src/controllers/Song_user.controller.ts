@@ -8,9 +8,10 @@ export default class SongUserController {
 
     async uploadSong(req: any, res: any, next: any) {
         try {
+           
             const { data } = req.body;
             const song = JSON.parse(data) as SongUser;
-
+            
             const songFile = req.files[0];
 
             const s3Storage = new S3Storage();
@@ -28,19 +29,20 @@ export default class SongUserController {
         }
     }
 
-    async getSong(req: any, res: any, next: any) {
+    async getSongById(req: any, res: any, next: any) {
         const { id } = req.params;
         try {
-            const result = await new SongUserService().getSong(id);
+            const result = await new SongUserService().getSongById(id);
             return res.status(200).send(result);
         } catch (err) {
             return res.status(400).send(err);
         }
     }
 
-    async listSongs(req: any, res: any, next: any) {
+    async listSongsByUser(req: any, res: any, next: any) {
         try {
-            const result = await new SongUserService().getSongs();
+            const { id } = req.params;
+            const result = await new SongUserService().getSongsByUser(id);
             return res.status(200).send(result);
         } catch (err) {
             return res.status(400).send(err);
@@ -51,7 +53,7 @@ export default class SongUserController {
         try {
             const { id } = req.params;
 
-            const result = await new SongUserService().getSong(id);
+            const result = await new SongUserService().getSongById(id);
             if(!result) throw new Error('Id não encontrado');
 
             StreamBuffer.streamVideo(req, res, result.key);

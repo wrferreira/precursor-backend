@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { db } from '../db.config';
 import SongUser from '../models/Song_user.model';
 
@@ -10,20 +11,20 @@ export default class SongUserService {
         [
             song.song_id,
             song.user_id,
-            null,
+            moment.utc().format('YYYY-MM-DD HH:mm:ss'),
             song.key,
         ]);
 
         return rows;
     }
 
-    async getSong(id: number): Promise<SongUser> {
+    async getSongById(id: number): Promise<SongUser> {
         const { rows } = await db.query('SELECT * FROM songs_users WHERE id=$1', [id]);
         return rows[0];
     }
 
-    async getSongs(): Promise<SongUser> {
-        const { rows } = await db.query('SELECT id, title, initial_text, letter, allow_download FROM songs_users');
+    async getSongsByUser(idUser: number): Promise<SongUser> {
+        const { rows } = await db.query('SELECT songs.id, songs.title, users.email, users.name FROM songs_users INNER JOIN songs ON songs.id = song_id INNER JOIN users ON users.id = user_id WHERE user_id =$1', [idUser]);
         return rows;
     }
 }
