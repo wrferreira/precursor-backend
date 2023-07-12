@@ -4,6 +4,7 @@ const cors = require('cors');
 import { PlansRouter } from "./routes/plans.route";
 import { SessionRouter } from "./routes/session.route";
 import { SongRouter } from "./routes/song.route";
+import { SongUserRouter } from "./routes/song_user.route";
 import { UserRouter } from "./routes/user.route";
 import { VideoRouter } from "./routes/video.route";
 
@@ -32,6 +33,7 @@ class App {
         this.express.use('/user', UserRouter);
         this.express.use('/session', SessionRouter);
         this.express.use('/song', SongRouter);
+        this.express.use('/song-user', SongUserRouter);
         this.express.use('/plans', PlansRouter);
         this.express.use('/video', VideoRouter);
     }
