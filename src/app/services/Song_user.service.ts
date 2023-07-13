@@ -1,6 +1,6 @@
 import moment from 'moment';
-import { db } from '../db.config';
 import SongUser from '../models/Song_user.model';
+import { db } from '../../config/connection';
 
 export default class SongUserService {
 

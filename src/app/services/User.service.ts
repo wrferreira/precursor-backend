@@ -1,4 +1,4 @@
-import { db } from '../db.config';
+import { db } from '../../config/connection';
 import User from '../models/User.model';
 import { Encrypt } from '../utils/encrypt';
 
@@ -63,5 +63,10 @@ export default class UserService {
         ]);
 
         return rows;
+    }
+
+    async getUserByEmail(email: string): Promise<User> {
+        const { rows } = await db.query('SELECT * FROM users WHERE email =$1', [email]);
+        return rows != null ? rows[0] : null;
     }
 }

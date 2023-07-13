@@ -1,4 +1,4 @@
-import { db } from '../db.config';
+import { db } from "../../config/connection";
 import Video from "../models/Video.model";
 import moment from 'moment';
 

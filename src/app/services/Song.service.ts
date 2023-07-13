@@ -1,6 +1,7 @@
-import { db } from '../db.config';
+
 import moment from 'moment';
 import Song from '../models/Song.model';
+import { db } from '../../config/connection';
 
 export default class SongService {
 

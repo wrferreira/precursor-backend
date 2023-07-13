@@ -54,10 +54,10 @@ export default class SongUserController {
             const { id } = req.params;
 
             const result = await new SongUserService().getSongById(id);
-            if(!result) throw new Error('Id não encontrado');
 
+            if(!result) throw new Error('Id não encontrado');
             StreamBuffer.streamVideo(req, res, result.key);
-            
+       
         } catch (err) {
             console.error(err);
             res.sendStatus(500);

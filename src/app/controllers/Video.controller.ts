@@ -1,3 +1,4 @@
+import { BaseRequestResult } from "../../config/baseResultRequest";
 import Video from "../models/Video.model";
 import VideoService from "../services/Video.service";
 import S3Storage from "../utils/S3Storage";
@@ -59,7 +60,7 @@ export default class VideoController {
     async listVideos(req: any, res: any, next: any) {
         try {
             const result = await new VideoService().getVideos();
-            return res.status(200).send(result);
+            res.sendResponse(result);
         } catch (err) {
             return res.status(400).send(err);
         }
